@@ -1,0 +1,48 @@
+//===============================================================
+// NAME  ICH_MENU2.mac - ICHが作ったメニュー
+
+
+
+$ini_file = macrodir + "\\ichini2.txt";
+$section = "Topmenu";
+
+while (1) {
+	#menu = getininum( $ini_file, $section, "num" );
+	#i = 0;
+	while ( #menu+1 > #i) {
+		$top[#i] = getinistr( $ini_file, $section, str(#i+1) );
+		$menu[#i] = leftstr( $top[#i] , strstr( $top[#i] , ":" ) );
+		$command[#i] = rightstr ( $top[#i] , strlen ( $top[#i] ) - strstr ( $top[#i] , ":" )  - 1 );
+		#i = #i + 1;
+	}
+	
+	mousemenuarray $menu, #menu;
+	if ( result == 0 ) break;
+	#i = result - 1;
+	$type = leftstr( $command[#i], strstr( $command[#i], ":"));
+	$subc = rightstr( $command[#i], strlen($command[#i]) - strstr($command[#i], ":") - 1);
+
+	if ( $type == "menu" ) {
+		$section = $subc;
+		continue;
+	}
+	else if ( $type == "str" ) {
+		if ( overwrite ) { overwriteswitch; }
+		insert $subc;
+		break;
+	}
+	else if ( $type == "mac" ) {
+		$arg = rightstr( $subc, strlen($subc) - strstr($subc, " ") -1);		// 引数を取得（なければマクロ名がそのまま入ります)
+		$subc1 = leftstr($subc, strstr($subc, " "));						// 引数があれば、そのマクロ名（なければ空白）
+		if ( $subc1 != "" ) {							// $subc1 の有無で、引数の有無を判定
+			execmacro macrodir + "\\" + $subc1,$arg;
+		} else {
+			execmacro macrodir + "\\" + $subc;
+		}
+		break;
+	}
+}
+endmacro;
+
+//====================================================================
+// End of macor

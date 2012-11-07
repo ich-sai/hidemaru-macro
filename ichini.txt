@@ -1,0 +1,22 @@
+[Topmenu]
+title=HTMLタグ挿入  －  こだマクロ
+path=d:\ICH'S\U_PAGE\
+conti=yes
+num=10
+0=(&Esc)終了:
+1=日時:ICHMAC01.MAC
+2=Dateコマンド:ICH_date.mac
+3=SPECIFICATION作成:SPECIFICATION作成.mac
+4=連番設定:連番設定.mac
+5=連続TAG:連続TAG設定.mac
+6=LTRIM:LTRIM.mac
+7=HTML:ICH_HTML.mac
+8=Perl Header:ICHMAC02.MAC
+9=昨日の出来事:Yesterday01.mac
+10=sepcFileTemplate:specFileTemplate.mac
+[Tagmenu]
+num=3
+0=(&Esc)終了:
+1=<element>～</element>:TAG_element.mac
+2=<strong>～</strong>:TAG_strong.mac
+3=<p>～</p>:TAG_p.mac

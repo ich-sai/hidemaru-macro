@@ -1,0 +1,115 @@
+//=====================================================================
+// NAME
+// 	SPECINFCATIONì¬.mac - SPECIFICATION ì¬ƒ}ƒNƒ
+//
+// SYONPSIS
+//	GŠÛƒ}ƒNƒ
+//
+// DESCRIPTION
+// AUTHOR		SAITOH,Ichie		ich_sai@ka2.so-net.ne.jp
+// HISTORY
+//  1998.10.26 	ICH.Saitoh   Create
+//  1999.07.09 	“r’†‚ÌƒLƒƒƒ“ƒZƒ‹ƒ{ƒ^ƒ“‚ª‚¿‚á‚ñ‚Æ‹@”\‚·‚é‚æ‚¤‚É‚µ‚½B
+//	2007/07/12	//========= ‚Æ #-------------- ‚ğ’Ç‰Á
+//
+// REVISION		$Id:$
+//=====================================================================
+
+$menu[0] = "/*********************/";
+$menu[1] = "#======================";
+$menu[2] = "#----------------------";
+$menu[3] = "//=====================";
+mousemenuarray $menu,4;
+
+$defCols = "70";
+$defRows = "3";
+
+if ( result == 0 ) endmacro;
+if ( result == 1 ) {
+    $l = "/*";          // ã‰º˜g‚Ì¶i‚QŒ…j
+    $r = "*/";          // ã‰º˜g‚Ì‰Ei‚QŒ…j
+    $m = "*";           // ã‰º˜g‚Ì’†i‚PŒ…j
+    $lm = "/*";         // ’†‰›•”‚Ì¶i‚QŒ…j
+    $rm = "*/";         // ’†‰›•”‚Ì‰Ei‚QŒ…j
+}
+
+if ( result == 2 ) {
+    $l = "#=";          // ã‰º˜g‚Ì¶i‚QŒ…j
+    $r = "==";          // ã‰º˜g‚Ì‰Ei‚QŒ…j
+    $m = "=";           // ã‰º˜g‚Ì’†i‚PŒ…j
+    $lm = "# ";         // ’†‰›•”‚Ì¶i‚QŒ…j
+    $rm = "  ";         // ’†‰›•”‚Ì‰Ei‚QŒ…j
+}
+
+if ( result == 3 ) {
+    $l = "#-";          // ã‰º˜g‚Ì¶i‚QŒ…j
+    $r = "--";          // ã‰º˜g‚Ì‰Ei‚QŒ…j
+    $m = "-";           // ã‰º˜g‚Ì’†i‚PŒ…j
+    $lm = "# ";         // ’†‰›•”‚Ì¶i‚QŒ…j
+    $rm = "  ";         // ’†‰›•”‚Ì‰Ei‚QŒ…j
+	$defCols = "30";
+}
+
+if ( result == 4 ) {
+    $l = "//";          // ã‰º˜g‚Ì¶i‚QŒ…j
+    $r = "==";          // ã‰º˜g‚Ì‰Ei‚QŒ…j
+    $m = "=";           // ã‰º˜g‚Ì’†i‚PŒ…j
+    $lm = "//";         // ’†‰›•”‚Ì¶i‚QŒ…j
+    $rm = "  ";         // ’†‰›•”‚Ì‰Ei‚QŒ…j
+}
+
+
+$str = input("Œ…”",$defCols);
+if ( ! result ) {
+    endmacro;
+}
+#col = val($str) -4 ;
+$str = input("s”",$defRows);
+if ( ! result ) {
+    endmacro;
+}
+#row = val($str) - 2;
+
+if ( x != 0 ){
+    down;
+    golinetop;
+}
+
+// ã‰º‚ğì¬
+insert $l;
+#i = 0;
+while( #col > #i ){
+    insert $m;
+    #i = #i + 1;
+}
+insert $r;
+if( overwrite ) {
+    overwriteswitch; insertreturn; overwriteswitch;
+} else {
+    insertreturn;
+}
+up;
+dupline;
+
+// ŠÔ‚ğì¬
+insert $lm;
+#i = 0;
+while( #col > #i ){
+    insert " ";
+    #i = #i + 1;
+}
+insert $rm;
+
+if( overwrite ) {
+    overwriteswitch; insertreturn; overwriteswitch;
+} else {
+    insertreturn;
+}
+up;
+#j = 1;
+while ( #row > #j ){
+    dupline;
+    #j = #j + 1;
+}
+
+endmacro;

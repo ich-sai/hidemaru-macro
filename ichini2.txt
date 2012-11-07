@@ -1,0 +1,49 @@
+//-----------------------------------------------------------
+// セクションには、num キーワードを入れること
+// 1～=メニュー文字列:str|mac|menu:パラメータ
+//  パラメータは、type によって異なります。
+//   type  str  パラメータの文字列をそのまま挿入します。
+//         mac  パラメータをマクロ名として実行します。
+//         menu パラメータを、新しいセクション名として、新たなメニューを表示します。
+//-----------------------------------------------------------
+
+
+[Topmenu]
+num=3
+1=一般:menu:一般
+2=HTML:menu:HTML
+3=Perl:menu:Perl
+
+[一般]
+num=2
+1=連番:mac:ICHMACRO\連番設定.mac
+2=四角枠:mac:ICHMACRO\flame.mac
+
+[HTML]
+num=4
+1=Template(simple):mac:ICHMACRO\html5_simple_template.mac
+2=include css:str:<link rel="stylesheet" type="text/css" href="
+3=include script:str:<script type="text/javascript" src="_______"></script>
+4=JavaScript:menu:JavaScript
+
+[JavaScript]
+num=2
+1=jQuery Document Ready:mac:ICHMACRO\jQuery_document_ready.mac
+2=QUnit HTML Template:mac:ICHMACRO\QUnit_test_html_template.mac
+
+[Perl]
+num=3
+1=constructor:mac:ICHMACRO\perl_constructor.mac
+2=localtime:str:my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdat) = localtime()
+3=test:menu:Perl-Test
+
+[Perl-Test]
+num=1
+1=CaseTemplate:mac:ICHMACRO\hmm_for_perl.mac casetemplate
+
+[Tagmenu]
+num=3
+1=<element>～</element>:TAG_element.mac
+2=<strong>～</strong>:TAG_strong.mac
+3=<p>～</p>:TAG_p.mac
+

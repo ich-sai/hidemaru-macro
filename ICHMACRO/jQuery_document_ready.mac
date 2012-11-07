@@ -1,0 +1,5 @@
+if ( overwrite ) { overwriteswitch; }
+insert "$(document).ready(function(){\n";
+insert "    // code here\n";
+insert "});\n";
+endmacro;

@@ -1,0 +1,32 @@
+// =NAME
+//	Yesterday01.mac - 「昨日の出来事」定型部分(<article id = ....>～</article>作成マクロ
+//
+// =SYNOPSIS
+//	秀丸マクロ
+//
+// =DESCRIPTION
+//	ダイアログを開き、"YYYYMMDD"形式の文字列を入力させ、
+//		<article id = "入力文字列">
+//		<head><modify>1</modify></head>
+//		<body>
+//		</body>
+//		</article>
+//	を挿入する。
+
+$strtmp = date;
+$str_id = "20" + midstr($strtmp,0,2) + midstr($strtmp,3,2) + midstr($strtmp,6,2);
+$str_id = input("yyyymmdd",$str_id);
+if ( result == false ) endmacro ;
+
+if ( overwrite ) { overwriteswitch; }
+insert "<article id = \""+$str_id+"\">";;
+insertreturn;
+insert "<head><modify>1</modify></head>";
+insertreturn;
+insert "<body>";
+insertreturn;
+insert "</body>";
+insertreturn;
+insert "</article>";
+insertreturn;
+endmacro;

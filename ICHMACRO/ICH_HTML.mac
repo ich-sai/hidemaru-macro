@@ -1,0 +1,392 @@
+//  ICH TAG挿入型HTMLマクロ
+//
+//                                                  1999/09/29
+//                                                  ICH.SAITOH
+
+
+#selecting = selecting;
+#sx = x;
+#sy = y;
+#seltopx = seltopx;
+#seltopy = seltopy;
+#selendx = selendx;
+#selendy = selendy;
+$align[0] = "center";
+$align[1] = "left";
+$align[2] = "right";
+
+
+menu "<HTML>","<DIV>","<IMG>","<SCRIPT>","<BODY>","書体","属性","FORM";
+
+if ( result == 0 ) {
+    endmacro;                       // ESC -> End Macro
+} else if ( result == 1 ) {
+    call HTML;                      // HTML
+} else if ( result == 2 ) {
+    call DIV;                       // DIV
+} else if ( result == 3 ) {
+    call IMG;                       // IMG
+} else if ( result == 4 ) {
+    call SCRIPT;                    // SCRIPT
+} else if ( result == 5 ) {
+    call BODY;                      // BODY
+} else if ( result == 6 ) {
+    call SYOTAI;                    // 書体メニュー
+} else if ( result == 7 ) {
+    call ZOKUSEI;                   // 属性
+} else if ( result == 8 ) {
+    call FORM;                      // FORM
+}
+moveto #sx,#sy;                     // カーソル位置、元へ
+endmacro;
+
+
+SELECT_TOP:
+    if ( #selecting ) {                 // 範囲指定中
+        moveto 0,#seltopy;              // 範囲指定開始行、行頭
+    }
+    return;
+
+SELECT_END:
+    if ( #selecting ) {                 // 範囲指定中
+        moveto #selendx,#selendy;       // 範囲指定開始行、行頭
+    }
+    return;
+
+
+HTML:
+    escape;
+    call SELECT_END;
+    insert "</HTML>\n";                 // 範囲指定のことがあるので、まず終了タグから
+    up;                                 // ひとまずカーソルを上にあげて、
+    call SELECT_TOP;                    // あらためて開始タグ挿入位置へ
+    insert "<!doctype html public \"-//w3c//dtd html 4.0 transitional//en\">\n";
+    insert "<HTML>\n";
+    return;
+
+
+DIV:
+    escape;
+    call ALIGN;
+    ##ret = ##return;
+    call SELECT_END;
+    insert "</DIV>\n";                      // 範囲指定のことがあるので、まず終了タグから
+    up;                                     // ひとまずカーソルを上に上げて、
+    call SELECT_TOP;                        // あらためて開始タグ挿入位置へ
+    if (    ##ret == 1 
+         || ##ret == 2 
+         || ##ret == 3){
+        insert "<DIV ALIGN=\""+$align[##return-1]+"\">\n";
+    } else {
+        insert "<DIV>\n";
+    }
+    return;
+
+
+BODY:
+    $$fin_str = "<BODY";
+    $$src = "";
+    if ( #selecting ) {                     // 範囲指定されていれば、それが背景のデフォルト画像ファイルとする。
+        copy2;
+        beginclipboardread;
+        $$src = getclipboard;
+    }
+
+    // ----------------------------------------------------- BACKGROUND属性（背景画像）
+    $$src = input("BACKGROUND(背景画像)=",$$src);
+    if ( result == 0 ) return;
+    if ( strlen( $$src ) != 0 ) {                           // 入力文字列あり？
+        $$fin_str = $$fin_str + " BACKGROUND=\"" + $$src + "\"";
+    }
+
+    // ----------------------------------------------------- BGCOLOR属性（背景色）
+    question "BGCOLOR（背景色）を設定する？";
+    if ( result == yes ) {
+        call COLOR;
+        $$src = $$return;
+        if ( strlen($$src) != 0 ){
+            $$fin_str = $$fin_str + " BGCOLOR=\"" + $$src + "\"";
+        }
+    }
+    
+    // ----------------------------------------------------- TEXT属性（通常TEXT色）
+    question "TEXT（通常TEXT色）を設定する？";
+    if ( result == yes ) {
+        call COLOR;
+        $$src = $$return;
+        if ( strlen($$src) != 0 ){
+            $$fin_str = $$fin_str + " TEXT=\"" + $$src + "\"";
+        }
+    }
+    
+    // ----------------------------------------------------- LINK属性（LINK TEXT色）
+    question "LINK（LINK TEXT色）を設定する？";
+    if ( result == yes ) {
+        call COLOR;
+        $$src = $$return;
+        if ( strlen($$src) != 0 ){
+            $$fin_str = $$fin_str + " LINK=\"" + $$src + "\"";
+        }
+    }
+
+    // ----------------------------------------------------- VLINK属性（キャッシュ済LINK TEXT色）
+    question "VLINK（キャッシュ済LINK TEXT色）を設定する？";
+    if ( result == yes ) {
+        call COLOR;
+        $$src = $$return;
+        if ( strlen($$src) != 0 ){
+            $$fin_str = $$fin_str + " VLINK=\"" + $$src + "\"";
+        }
+    }
+
+    // ----------------------------------------------------- ALINK属性（Click中LINK TEXT色）
+    question "ALINK（Click中LINK TEXT色）を設定する？";
+    if ( result == yes ) {
+        call COLOR;
+        $$src = $$return;
+        if ( strlen($$src) != 0 ){
+            $$fin_str = $$fin_str + " ALINK=\"" + $$src + "\"";
+        }
+    }
+
+    $$fin_str = $$fin_str + ">\n</BODY>\n";
+    insert $$fin_str;
+    return;
+
+
+SCRIPT:
+    escape;
+    call SELECT_END;
+    insert "// -->\n";
+    insert "</SCRIPT>\n";                       // 範囲指定のことがあるので、まず終了タグから
+    up;up;                                      // ひとまずカーソルを上にあげて、
+    call SELECT_TOP;                            // あらためて開始タグ挿入位置へ
+    insert "<SCRIPT LANGUAGE=\"JavaScript\">\n";    // JavaScriptだけ
+    insert "<!--\n";
+    return;
+
+
+IMG:
+    $$fin_str="<IMG ";                      // 最終的に出力する文字列
+
+    // ----------------------------------------------------- SRC属性
+    $$src="";
+    if ( #selecting ) {                     // 範囲指定されていれば、それがデフォルトの画像ファイルとする。
+        copy2;
+        beginclipboardread;
+        $$src = getclipboard;
+    }
+    $$src = input( "SRC=",$src);
+    if ( result == 0 ) return;
+    $$pic_name = $src;
+    $$fin_str = $$fin_str + "SRC=\"" + $$src + "\"";
+    
+    // ----------------------------------------------------- ALT属性
+    $$src="";
+    $$src = input( "ALT=",$$pic_name );                             // デフォルトは、画像ファイル名
+    if ( result == 0 ) return;
+    if ( strlen( $$src ) == 0 ) {                                   // 文字列入力なし？
+        $$src = $$pic_name;                                         // デフォルト
+    }
+    $$fin_str = $$fin_str + " ALT=\"" + $$src + "\"";
+
+    // ----------------------------------------------------- BORDER属性
+    $$src="";
+    $$src = input("BORDER=","0");
+    if ( result == 0 ) return;
+    ##src = val( $$src );
+    $$fin_str = $$fin_str + " BORDER=\"" + str(##src) + "\"";
+    
+    // ----------------------------------------------------- HEIGHT属性
+    $$src="";
+    $$src = input( "HEIGHT=" );
+    if ( result == 0 ) return;
+    ##src = val( $$src );
+    if ( ##src != 0 ) {
+        $$fin_str = $$fin_str + " HEIGHT=\"" + str(##src) + "\"";
+    }
+    
+    // ----------------------------------------------------- WIDTH属性
+    $$src="";
+    $$src = input( "WIDTH=" );
+    if ( result == 0 ) return;
+    ##src = val( $$src );
+    if ( ##src != 0 ) {
+        $$fin_str = $$fin_str + " WIDTH=\"" + str(##src) + "\"";
+    }
+    insert $$fin_str+">";
+    return;
+
+
+FORM:                           // -------------------------- FORM部品設定
+    menu "<FORM>","<INPUT>";
+    ##ret = result;
+    if ( ##ret == 0 ) return;
+    $$sel_str="";
+    if ( #selecting ) {                     // 範囲指定された文字列を取得
+        copy2;
+        beginclipboardread;
+        $$sel_str = getclipboard;
+    }
+
+    //-------------- <FORM>タグ
+    if ( ##ret == 1 ) {
+        $$fin_str="<FORM";
+        $$src = input("ACTION=",$$sel_str);     // 範囲指定文字列が ACTIONのデフォルト
+        if ( result == 0 ) return;
+        $$fin_str = $$fin_str + " ACTION=\"" + $$src + "\"";
+        $$fin_str = $$fin_str + " METHOD=POST";
+        $$src = input("TARGET=","");
+        if ( result == 0 ) return;
+        if ( strlen($$src) != 0 ) {
+            $$fin_str = $$fin_str + " TARGET=\"" + $$src + "\"";
+        }
+        $$src = input("NAME=","");
+        if ( result == 0 ) return;
+        if ( strlen($$src) != 0 ) {
+            $$fin_str = $$fin_str + " NAME=\"" + $$src + "\"";
+        }
+        $$fin_str = $$fin_str + ">\n</FORM>";
+        insert $$fin_str;
+    } else if ( ##ret == 2 ) {              // ---------------- <INPUT>タグの処理
+        $$inp_type[0]="TEXT";
+        $$inp_type[1]="PASSWORD";
+        $$inp_type[2]="RADIO";
+        $$inp_type[3]="HIDDEN";
+        $$inp_type[4]="SUBMIT";
+        $$inp_type[5]="RESET";
+        $$inp_type[6]="BUTTON";
+        menuarray $$inp_type,7;
+        ##ret = result;
+        if ( ##ret == 0 ) return;
+        $$fin_str = "<INPUT TYPE=\"" + $$inp_type[ ##ret+1 ] + "\"";
+        $$src = input("NAME=" );
+        if ( result == 0 ) return;
+        $$fin_str = $$fin_str + " NAME=\"" + $$src + "\"";      // NAME属性の設定
+
+        //--------------- TEXT, PASSWORD
+        if ( ##ret <= 2 ) {
+            $$src = input("SIZE=" );                            // SIZE属性の設定
+            if ( result == 0 ) return;
+            if ( strlen( $$src ) != 0 ) {
+                $$fin_str = $$fin_str + " SIZE=\"" + $$src + "\"";
+            }
+            $$src = input( "MAXLENGTH=" );                      // MAXLENGTH属性設定
+            if ( strlen( $$src ) != 0 ) {
+                $$fin_str = $$fin_str + " MAXLENGTH=\"" + $$src + "\"";
+            }
+            $$src = input ( "VALUE=",$$sel_str );               // VALUE属性の設定
+            if ( strlen( $$src ) != 0 ) {
+                $$fin_str = $$fin_str + " VALUE=\"" + $$src + "\"";
+            }
+            $$fin_str = $$fin_str + ">\n";
+            insert $$fin_str;
+            return;
+        }
+        if ( ##ret == 4 ) {
+            
+            
+            
+            
+        }
+    }
+    return;
+
+SYOTAI:                         //-------------------------- 書体Menu
+    menu "<B>太字","<I>斜体","<TT>等幅フォント","<U>下線","<S>取消線","<BLINK>点滅","<FONT>";
+    ##ret = result;
+    if ( ##ret == 0 ) {
+        return;
+    }
+    $$src="";
+    if ( #selecting ) {                     // 範囲指定された文字列を取得
+        copy2;
+        beginclipboardread;
+        $$src = getclipboard;
+    }
+    if ( ##ret == 1 ) $$tag = "<B>";
+    if ( ##ret == 2 ) $$tag = "<I>";
+    if ( ##ret == 3 ) $$tag = "<TT>";
+    if ( ##ret == 4 ) $$tag = "<U>";
+    if ( ##ret == 5 ) $$tag = "<S>";
+    if ( ##ret == 6 ) $$tag = "<BLINK>";
+    $$etag = "</" + midstr( $$tag,1,10);        // 閉じTAG
+    if ( ##ret == 7 ) {                         // <FONT>の属性決定
+        $$tag = "<FONT";
+        $$tmp = input( "SIZE=" );
+        if ( result == 0 ) return;
+        if ( strlen( $$tmp ) != 0 ) $$tag = $$tag + " SIZE=\"" + $$tmp + "\"";
+        call COLOR;
+        $$tmp = $$return;
+        if ( strlen($$tmp) != 0 ) $$tag = $$tag + " COLOR=\"" + $$tmp + "\"";
+         $$tag = $$tag + ">";
+        $$etag = "</FONT>";
+    }
+    insert $$tag;
+    insert $$src;
+    insert $$etag;
+    return;
+
+ZOKUSEI:                                                    // 属性の変更・追加
+    menu "ALIGN","COLOR";
+    if ( result == 0 ) ; return;
+    if ( result == 1 ) {
+    //------------------------------------------------------ ALIGN属性の変更/追加
+        call ALIGN;
+        ##ret = ##return;
+        if( ##ret == 0 ) return;
+        if ( #selecting ) {                                 // 選択中？
+            insert $align[ ##ret -1 ];                      // 選択中なら変更
+        } else {
+            insert " ALIGN=\"" + $align[ ##ret -1 ] + "\""; // 選択中でなければ追加
+        }
+        return;
+    } else if ( result == 2 ) {
+    //------------------------------------------------------ COLOR属性の変更/追加
+        call COLOR;
+        $$ret = $$return;
+        if ( strlen( $$ret ) == 0 ) return;                 // 設定なしであればなにもしない
+        if ( #selecting ) {                                 // 選択中？
+            insert $$ret;                                   // 選択中なら変更
+        } else {
+            insert " COLOR=\"" +$$ret + "\"";               // 選択中でなければ追加
+        }
+        return;
+    }
+    return;
+
+//---------------------------------------------------------- ALIGN属性共通ドロップダウン
+ALIGN:
+    menu "&"+$align[0],"&"+$align[1],"&"+$align[2];
+    return result;
+
+//---------------------------------------------------------- COLOR属性共通ドロップダウン
+COLOR:
+    $color16[0]="BLACK";
+    $color16[1]="GRAY";
+    $color16[2]="SILVER";
+    $color16[3]="WHITE";
+    $color16[4]="RED";
+    $color16[5]="YELLOW";
+    $color16[6]="LIME";
+    $color16[7]="AQUA";
+    $color16[8]="BLUE";
+    $color16[9]="FUCHSIA";
+    $color16[10]="MAROON";
+    $color16[11]="OLIVE";
+    $color16[12]="GREEN";
+    $color16[13]="TEAL";
+    $color16[14]="NAVY";
+    $color16[15]="PURPLE";
+    $color16[16]="other...";
+    
+    menuarray $color16,17;
+    if ( result == 0 ) return "";           // ESC -> 設定なし。
+    if ( result == 17 ) {                   // Other
+        $$src = input("COLOR=\nＲＧＢ\nxxxxxx","FFFFFF");
+        if ( result == 0 ) return "";           // Cancel
+        if ( strlen( $$src ) == 0 ) return "";  // 未入力
+        $$src = "#" + $$src;
+        return $$src;
+    }
+    return $color16[ result-1 ];

@@ -1,0 +1,46 @@
+//====================================================================
+// NAME                                                               
+// 	specFileTemplate.mac - rpm の spec file 作成支援テンプレート出力
+//
+// SYNOPSIS
+//	秀丸マクロ
+//
+// DESCRIPTION
+//	< to be written >
+//
+// NOTE
+//	この spec file のテンプレートは、SGS/用になっています。
+
+// AUTHOR	SAITOH,Ichie
+// HISTORY
+//	2007/07/12	SAITOH,Ichie		Create New
+//
+// REVISION			$Id:$
+//                                                                    
+//====================================================================
+
+insert "Summary: \n";
+insert "Name: \n";
+insert "Version: \n";
+insert "Release: \n";
+insert "License: SGS\n";
+insert "Group: User Application/PJ Support Tool\n";
+insert "Buildroot: %{_tmppath}/%{name}\n";
+insert "Prefix: \n";
+insert "\n";
+insert "%description\n";
+insert "\n";
+insert "%prep\n";
+insert "\n";
+insert "%build\n";
+insert "\n";
+insert "%install\n";
+insert "\n";
+insert "%clean\n";
+insert "\n";
+insert "%post\n";
+insert "\n";
+insert "%files\n";
+insert "\n";
+
+endmacro;

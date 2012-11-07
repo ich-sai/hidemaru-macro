@@ -1,0 +1,25 @@
+if ( overwrite ) { overwriteswitch; }
+$print_str[0]  = "sub new {";
+$print_str[1]  = "    my ($parm) = shift;";
+$print_str[2]  = "    my ($class) = ref($parm) || $parm;";
+$print_str[3]  = "    my ($self) = {};";
+$print_str[4]  = "    bless($self, $class);";
+$print_str[5]  = "";
+$print_str[6]  = "    $self->_initialize();";
+$print_str[7]  = "    return $self;";
+$print_str[8]  = "}";
+$print_str[9]  = "";
+$print_str[10] = "sub _initialize {";
+$print_str[11] = "    my $self = shift;";
+$print_str[12] = "";
+$print_str[13] = "    $self{'property'} = \"value\";";
+$print_str[14] = "}";
+
+#c = 0;
+while (#c <= 14) {
+	insert $print_str[#c];
+	insert "\n";
+	#c = #c + 1;
+}
+
+endmacro;

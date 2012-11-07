@@ -1,0 +1,11 @@
+// 日時挿入マクロ
+//                                      1996/01/12
+//  1999.07.08 in KR Bld. カーソル行の行末に日時を挿入するように変更。
+//                                      ICH.SAITOH
+// gofileend
+golineend2;
+insert " ";
+insert date;
+insert " ";
+insert time;
+endmacro

@@ -1,0 +1,19 @@
+// ˜A”Ô‘}“üƒ}ƒNƒ
+//  									1997/12/11
+//										1997/12/11
+//										ICH.SAITOH
+$str=input("FROM","0");
+#from=val($str);
+$str=input("TO","10");
+#to=val($str);
+$str=input("Len","3");
+#len=val($str);
+
+while(#from <= #to )
+{
+	$str = "0000000000" + str(#from);
+	$str = rightstr( $str, #len);
+	insert $str;
+	insertreturn;
+	#from = #from + 1;
+}

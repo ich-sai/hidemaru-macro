@@ -1,0 +1,35 @@
+// /*  同じタグを繰り返し入力するためのマクロ */
+
+
+
+$MSG = "左のTAGを入力してね";
+$LTAG = input($MSG);
+if ( strlen($LTAG)==0 ){
+	endmacro;
+}
+
+$MSG = "右のTAGを入力してね";
+$RTAG = input($MSG);
+if ( strlen($RTAG)==0 ){
+	endmacro;
+}
+
+
+while(1){
+	if ( selecting == no ) {inputpos getinistr ( hidemarudir + "\\htmini.txt" , "Line" ,"message" + getinistr ( hidemarudir + "\\htmini.txt" , "Line" , "message" ) );}
+	if ( selecting == no ) {beginsel;inputpos getinistr ( hidemarudir + "\\htmini.txt" , "Line" ,"message" + str ( val ( getinistr ( hidemarudir + "\\htmini.txt" , "Line" , "message" ) ) + 10 ) );}
+	cut;
+	beginclipboardread;
+	$ORGSTR = getclipboard;
+	if ( strlen($ORGSTR) == 0 ){
+		break;
+	}
+	
+	insert $LTAG;
+	while ( strlen($ORGSTR) != 0 ){
+		insert $ORGSTR;
+		$ORGSTR = getclipboard;
+	}
+	insert $RTAG;
+}
+endmacro;

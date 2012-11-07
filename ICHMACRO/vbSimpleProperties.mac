@@ -1,0 +1,119 @@
+//==================================================================================================
+// NAME
+//	vbSimpleProperties - VBで、単純なプロパティの Get/Let プロシージャを生成する
+//
+// DESCRIPTION
+//	１行１アイテムになっているリストから、VBの単純なGet/Letのプロシージャを生成します
+//	リストの先頭は１行目で、空行or１桁目の文字が空白文字orファイルの最後がリストの直前行が最終行です
+//	リストの最終行から１０行の空行を追加してから、作成したプロシージャが追加されます
+//	プロパティは、Private変数に格納されます。Private変数名は、l_<PropertyName> になります
+//
+// NOTE
+//	リストが以下のようになっていると...
+//		hoge
+//		boyo
+//
+//	以下のソースコードが生成されます。
+//		Private l_hoge as Variant
+//		Private l_boyo as Varinat
+//		
+//		Public Property Get hoge() As Variant
+//    		hoge = l_hoge
+//		End Property
+//		Public Property Let hoge(ByVal vNewValue As Variant)
+//    		l_hoge = vNewValue
+//		End Property
+//
+//		Public Property Get boyo() As Variant
+//    		boyo = l_boyo
+//		End Property
+//		Public Property Let boyo(ByVal vNewValue As Variant)
+//    		l_boyo = vNewValue
+//		End Property
+//
+// HISTORY
+//	2005/09/26 SAITOH,Ichie				Create New
+//
+// REVISION
+//	$Id:$
+//==================================================================================================
+
+moveto 0,0;
+
+#bufCt = 0;
+
+// プロパティリストの読み込み
+LOOP01:
+call isEndOfList;
+if ( #myResult == true ) goto EXIT_LOOP01;
+
+	call getCurrentString;
+	$properties[#bufCt] = $currentString;
+	#bufCt = #bufCt + 1;
+
+	down;
+	if ( result == false ) {
+		message "プロパティリストがおかしい";
+		endmacro;
+	}
+
+	goto LOOP01;
+EXIT_LOOP01:
+
+//１０行の空行挿入
+#i = 1;
+while ( #i <= 10 ) {
+	insertline;
+	#i = #i +1;
+}
+
+//Privateの変数宣言
+down 10;
+#i = 0;
+if ( overwrite ) overwriteswitch;			// 上書きモード→挿入モード
+while ( #i < #bufCt ) {
+	insert "Private l_" + $properties[#i] + " As Variant";
+	insertreturn;
+	#i = #i + 1;
+}
+insertreturn;
+
+//プロパティプロシージャの宣言
+#i = 0;
+while ( #i < #bufCt ) {
+	insert "Public Property Get " + $properties[#i] + "() As Variant"; insertreturn;
+	insert "	" + $properties[#i] + " = " + "l_" + $properties[#i]; insertreturn;
+	insert "End Property"; insertreturn;
+	insert "Public Property Let " + $properties[#i] + "(ByVal vNewValue As Variant)"; insertreturn;
+	insert "	l_" + $properties[#i] + " = vNewValue"; insertreturn;
+	insert "End Property"; insertreturn;
+	insertreturn;
+	#i = #i + 1;
+}
+
+endmacro;
+
+isEndOfList:
+	if (code == eof ) {
+		#myResult = true;
+	} else if ( code == 0x20 ) {		// 半角スペース
+		#myResult = true;
+	} else if ( code == 0x09 ) {		// タブ
+		#myResult = true;
+	} else if ( code == 0x0d ) {		// 改行
+		#myResult = true;
+	} else if ( code == 0x8140) {		// 全角スペース
+		#myResult = true;
+	} else {
+		#myResult = false;
+	}
+return;
+
+getCurrentString:
+	copyword;
+	beginclipboardread;
+	$currentString = getclipboard;
+return;
+
+//==================================================================================================
+// End of Macro

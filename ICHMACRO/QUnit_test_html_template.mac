@@ -1,0 +1,36 @@
+//=====================================================================
+// NAME QUnit_test_html_template.mac - insert HTML template of QUnit test HTML
+// 
+//=====================================================================
+if ( overwrite ) { overwriteswitch; }
+
+$print_str[0]  = "<!DOCTYPE html>";
+$print_str[1]  = "<html>";
+$print_str[2]  = "<head>";
+$print_str[3]  = "<meta charset='UTF-8'>";
+$print_str[4]  = "<link rel=\"stylesheet\" type=\"text/css\" href=\"___qunit.css___\"/>";
+$print_str[5]  = "<script type=\"text/javascript\" src=\"___qunit.js___\"></script>";
+$print_str[6]  = "";
+$print_str[7]  = "<script type=\"text/javascript\" src=\"___test_target.js___\"></script>";
+$print_str[8]  = "<script type=\"text/javascript\" src=\"___test_runner.js___\"></script>";
+$print_str[9]  = "";
+$print_str[10] = "</head>";
+$print_str[11] = "<body>";
+$print_str[12] = "<h1 id=\"qunit-header\">Out Test Suite</h1>";
+$print_str[13] = "<h2 id=\"qunit-banner\"></h2>";
+$print_str[14] = "<div id=\"qunit-testrunner-toolbar\"></div>";
+$print_str[15] = "<h2 id=\"qunit-userAgent\"></h2>";
+$print_str[16] = "<ol id=\"qunit-tests\"></ol>";
+$print_str[17] = "</body>";
+$print_str[18] = "</html>";
+
+#c = 0;
+while (#c <= 18 ) {
+	insert $print_str[#c];
+	insert "\n";
+	#c = #c + 1;
+}
+
+endmacro;
+//============================================================
+// End of Macro

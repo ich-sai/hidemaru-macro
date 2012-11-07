@@ -1,0 +1,21 @@
+if ( overwrite ) { overwriteswitch; }
+
+$print_str[0] = "<!DOCTYPE html>";
+$print_str[1] = "<html>";
+$print_str[2] = "<head>";
+$print_str[3] = "<meta charset='UTF-8'>";
+$print_str[4] = "";
+$print_str[5] = "</head>";
+$print_str[6] = "<body>";
+$print_str[7] = "";
+$print_str[8] = "</body>";
+$print_str[9] = "</html>";
+
+#c = 0;
+while (#c <= 9) {
+	insert $print_str[#c];
+	insert "\n";
+	#c = #c + 1;
+}
+
+endmacro;

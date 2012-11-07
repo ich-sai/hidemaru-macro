@@ -1,0 +1,55 @@
+//============================================================
+//
+//=============================================================
+
+if ( rectselecting != 1 ) {
+	endmacro;
+}
+
+#my_seltopx = seltopx;
+#my_seltopy = seltopy;
+#my_selendx = selendx;
+#my_selendy = selendy;
+
+if ( overwrite ) { overwriteswitch; }
+if ( ! freecursor ) { freecursorswitch; }
+escape;
+
+moveto 0, #my_seltopy;
+insert "\n";
+#my_selendy = #my_selendy + 1;
+
+moveto #my_seltopx, #my_seltopy;
+insert "+";
+#c=1;
+while ( #my_seltopx + #c < #my_selendx ) {
+	insert "-";
+	#c = #c + 1;
+}
+insertfix "+";
+
+#c = 1;
+while ( #my_seltopy + #c <= #my_selendy ) {
+	moveto #my_seltopx, #my_seltopy + #c;
+	insert "|";
+	moveto #my_selendx, #my_seltopy + #c;
+	insert "|";
+	#c = #c + 1;
+}
+
+moveto 0, #my_selendy+1;
+insert "\n";
+
+moveto #my_seltopx, #my_selendy+1;
+insert "+";
+
+#c = 1;
+while ( #my_seltopx + #c < #my_selendx ) {
+	insert "-";
+	#c = #c + 1;
+}
+insertfix "+";
+
+endmacro;
+//====================================================================
+// End of Macro

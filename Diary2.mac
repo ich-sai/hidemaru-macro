@@ -1,0 +1,11 @@
+// 日誌作成用マクロ for ICH
+// カーソル位置に日付を挿入します。改行はしません。
+//
+// SAITOH,Ichie
+// 2003/01/13@御殿山ヒルズ
+
+if ( overwrite ) { overwriteswitch; }
+insert date;
+insert " ";
+insert time;
+endmacro;

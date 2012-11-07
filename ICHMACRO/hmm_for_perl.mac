@@ -1,0 +1,48 @@
+// ===================================================================
+// NAME hmm_for_perl.mac - Hidemaru Macros for Perl
+// SYNOPSIS
+//	hmm_for_perl.mac <param>
+// PARAMETER
+//	param			description
+//	--------------	---------------------------------------
+//	casetemplate  	insert
+// ===================================================================
+
+if ( argcount != 1 ) {
+	endmacro;
+}
+
+$arg = getarg(0);
+
+if ( $arg == "casetemplate" ) {
+	$caseno = input("Case No?");
+	if ( $caseno == "" ) {
+		endmacro;
+	}
+
+	$print_str[0]  = "Case" + $caseno + ":";
+	$print_str[1]  = "#---------------------------------------------------------------------";
+	$print_str[2]  = "#";
+	$print_str[3]  = "#";
+	$print_str[4]  = "#---------------------------------------------------------------------";
+	$print_str[5]  = "diag(\'== Case" + $caseno + " ==\');";
+	$print_str[6]  = "";
+	$print_str[7]  = "unless ( $label eq \"\" ) { exit }";
+	#print_str_len = 7;
+}
+else {
+	endmacro;
+}
+
+if ( overwrite ) { overwriteswitch; }
+
+#c = 0;
+while (#c <= #print_str_len) {
+	insert $print_str[#c];
+	insert "\n";
+	#c = #c + 1;
+}
+
+endmacro;
+//====================================================================
+// End of macor

@@ -1,0 +1,11 @@
+// <element>`</element>‘}“ü
+//
+// 2003.02.03 SAITOH,Ichie
+//
+$s_tag = "<p>";
+$e_tag = "</p>";
+if ( selecting == 0 ) endmacroall;
+cut;
+insert $s_tag;
+paste;
+insert $e_tag;

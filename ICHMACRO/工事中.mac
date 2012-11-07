@@ -1,0 +1,52 @@
+// NAME 
+//	çHéñíÜ.mac - çHéñíÜÉRÉÅÉìÉgì¸óÕ
+//
+//
+// REVISION
+//	$Id:$
+// HISTORY
+//	2005/12/06	SAITOH,Ichie
+
+
+insert "# XXX XXX             XX";
+insertreturn;
+insert "#  X   X               X";
+insertreturn;
+insert "#  X   X               X";
+insertreturn;
+insert "#  X   X  XX XX    XXXXX   XXXXX  XXX XX";
+insertreturn;
+insert "#  X   X   XX  X  X    X  X     X   XX  X";
+insertreturn;
+insert "#  X   X   X   X  X    X  XXXXXXX   X";
+insertreturn;
+insert "#  X   X   X   X  X    X  X         X";
+insertreturn;
+insert "#  X   X   X   X  X    X  X     X   X";
+insertreturn;
+insert "#   XXX   XXX XXX  XXXXXX  XXXXX  XXXXX";
+insertreturn;
+insert "#";
+insertreturn;
+insert "#                                                                            X";
+insertreturn;
+insert "#                                   X                               X";
+insertreturn;
+insert "#                                   X                               X";
+insertreturn;
+insert "#  XXXXX   XXXXX  XX XX    XXXXX   XXXX   XXX XX   XXXXX  XX  XX   XXXX    XXX     XXXXX  XX XX";
+insertreturn;
+insert "# X     X X     X  XX  X  X     X   X       XX  X X     X  X   X    X        X    X     X  XX  X";
+insertreturn;
+insert "# X       X     X  X   X   XXX      X       X     X        X   X    X        X    X     X  X   X";
+insertreturn;
+insert "# X       X     X  X   X      XX    X       X     X        X   X    X        X    X     X  X   X";
+insertreturn;
+insert "# X     X X     X  X   X  X     X   X  X    X     X     X  X  XX    X  X     X    X     X  X   X";
+insertreturn;
+insert "#  XXXXX   XXXXX  XXX XXX  XXXXX     XX   XXXXX    XXXXX    XX XX    XX    XXXXX   XXXXX  XXX XXX";
+insertreturn;
+insert "";
+insertreturn;
+
+endmacro;
